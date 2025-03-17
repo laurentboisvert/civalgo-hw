@@ -18,10 +18,26 @@ export async function POST(req) {
           if (err) {
             reject(new Response(JSON.stringify({ message: 'Error checking in' }), { status: 500 }));
           }
-          resolve(new Response(JSON.stringify({ message: 'Check-in successful', id: this.lastID }), { status: 200 }));
+
+
+          // After inserting check-in, query the user's role from the `users` table
+          db.get(
+            'SELECT role FROM users WHERE id = ?',
+            [userId],
+            (err, row) => {
+              if (err || !row) {
+                reject(new Response(JSON.stringify({ message: 'Error retrieving user role' }), { status: 500 }));
+              }
+
+              // Successful response with both check-in id and user role
+              resolve(new Response(JSON.stringify({ message: 'Check-in successful', role: row.role }), { status: 200 }));
+            }
+          );
         }
       );
     });
+
+    
   }
 
   if (action === "check-out") {

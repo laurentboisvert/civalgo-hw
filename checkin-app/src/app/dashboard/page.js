@@ -1,9 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/authContext';
+
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
+  const {user} = useAuth()
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,6 +21,12 @@ export default function Dashboard() {
 
     fetchUsers();
   }, []);
+
+  if (user?.role !== "supervisor") {
+    return (
+      <h1>Unauthorized...Supervisors only!</h1>
+    )
+  }
 
   return (
     <div>

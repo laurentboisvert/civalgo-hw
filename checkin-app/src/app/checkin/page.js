@@ -31,7 +31,8 @@ export default function CheckIn() {
     if (response.ok) {
       setStatus("Check-in successful!");
 
-      const userData = { id: userId, name: workerName, siteID };
+      const userData = { id: userId, name: workerName, siteID, role: data.role };
+      console.log(`role is ${data.role}`)
       login(userData);
     } else {
       setStatus(`Error: ${data.message}`);
