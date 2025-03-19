@@ -8,7 +8,7 @@ import { BaseFormPage } from "../components/nav";
 
 export default function CheckIn() {
   const [status, setStatus] = useState(null);
-  const [workerName, setWorkerName] = useState("")
+  const [username, setUsername] = useState("")
   const [siteID, setSiteID] = useState(1234)
 
   const { user, login, logout } = useAuth()
@@ -20,11 +20,10 @@ export default function CheckIn() {
 
 
   const handleCheckIn = async () => {
-    const userId = 1;
     const action = "check-in";
 
-    if (workerName == "" || !siteID) {
-      setStatus("Error: Please enter worker name and site ID")
+    if (username == "" || !siteID) {
+      setStatus("Error: Please enter username and site ID")
       return
     }
 
@@ -33,14 +32,14 @@ export default function CheckIn() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId, action }),
+      body: JSON.stringify({ username, action }),
     });
 
     const data = await response.json();
     if (response.ok) {
       setStatus("Check-in successful!");
 
-      const userData = { id: userId, name: workerName, siteID, role: data.role };
+      const userData = { username, siteID, role: data.role };
       console.log(`role is ${data.role}`)
       login(userData);
     } else {
@@ -50,13 +49,12 @@ export default function CheckIn() {
 
   const handleCheckout = async () => {
     const action = "check-out"
-    const userId = 1
     const response = await fetch("/api/checkin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ userId, action }),
+      body: JSON.stringify({ username, action }),
     })
 
     if (response.ok) {
@@ -73,7 +71,7 @@ export default function CheckIn() {
       <BaseFormPage>
         <h1 className="flex-row text-2xl font-bold">Worker Check-In</h1>
         <div>
-          <input type="text" value={workerName} onChange={(e) => setWorkerName(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Worker Name" required />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Username" required />
         </div>
         <div>
           <input type="text" value={siteID} onChange={(e) => setSiteID(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Site ID (default 1234)" required />
@@ -86,7 +84,7 @@ export default function CheckIn() {
 
   return (
     <BaseFormPage>
-      <h1 className="flex-row text-2xl font-bold">You are logged in as {user.name}</h1>
+      <h1 className="flex-row text-2xl font-bold">You are logged in as {user.username}</h1>
       <h2>Role: {user.role}</h2>
       <button
         onClick={handleCheckout}

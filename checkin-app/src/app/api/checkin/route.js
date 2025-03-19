@@ -2,28 +2,25 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database("./checkin.db");
 
-
 export async function POST(req) {
-  const { userId, action } = await req.json();
+  const { username, action } = await req.json();
   const testSiteID = 1234;
 
   if (action === 'check-in') {
-
     // Needs to check credentials first (password)
     return new Promise((resolve, reject) => {
       db.run(
-        'INSERT INTO check_ins (user_id, action, site_id) VALUES (?, ?, ?)',
-        [userId, 'check-in', testSiteID],
+        'INSERT INTO check_ins (username, action, site_id) VALUES (?, ?, ?)',
+        [username, 'check-in', testSiteID],
         function (err) {
           if (err) {
             reject(new Response(JSON.stringify({ message: 'Error checking in' }), { status: 500 }));
           }
 
-
           // After inserting check-in, query the user's role from the `users` table
           db.get(
-            'SELECT role FROM users WHERE id = ?',
-            [userId],
+            'SELECT role FROM users WHERE username = ?', 
+            [username],
             (err, row) => {
               if (err || !row) {
                 reject(new Response(JSON.stringify({ message: 'Error retrieving user role' }), { status: 500 }));
@@ -36,41 +33,40 @@ export async function POST(req) {
         }
       );
     });
-
-
   }
 
   if (action === "check-out") {
     return new Promise((resolve, reject) => {
       db.run(
-        'INSERT INTO check_ins (user_id, action, site_id) VALUES (?, ?, ?)',
-        [userId, 'check-out', testSiteID],
+        'INSERT INTO check_ins (username, action, site_id) VALUES (?, ?, ?)',
+        [username, 'check-out', testSiteID],
         function (err) {
           if (err) {
             reject(new Response(JSON.stringify({ message: 'Error checking out' }), { status: 500 }));
           }
-          resolve(new Response(JSON.stringify({ message: 'Check-out successful' }), { status: 200 }))
+          resolve(new Response(JSON.stringify({ message: 'Check-out successful' }), { status: 200 }));
         }
-      )
-    })
+      );
+    });
   }
 
   return new Response(JSON.stringify({ message: 'Invalid action' }), { status: 400 });
-
 }
 
 export async function GET() {
   const query = `
-      SELECT c.timestamp, c.site_id, u.username FROM check_ins c
-      JOIN users u ON u.id = c.user_id
+      SELECT c.id, c.timestamp, c.site_id, c.action, u.username 
+      FROM check_ins c
+      JOIN users u ON u.username = c.username
       ORDER BY c.timestamp DESC
-    `
+    `;
+  
   return new Promise((resolve, reject) => {
     db.all(query, (err, rows) => {
       if (err) {
-        reject(new Response(`Error fetching historical check-ins`))
+        reject(new Response(`Error fetching historical check-ins`, { status: 500 }));
       }
-      resolve(new Response(JSON.stringify(rows), { status: 200 }))
-    })
-  })
+      resolve(new Response(JSON.stringify(rows), { status: 200 }));
+    });
+  });
 }
