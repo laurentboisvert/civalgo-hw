@@ -37,7 +37,7 @@ export async function POST(req) {
       );
     });
 
-    
+
   }
 
   if (action === "check-out") {
@@ -54,7 +54,23 @@ export async function POST(req) {
       )
     })
   }
-  
+
   return new Response(JSON.stringify({ message: 'Invalid action' }), { status: 400 });
 
+}
+
+export async function GET() {
+  const query = `
+      SELECT c.timestamp, c.site_id, u.username FROM check_ins c
+      JOIN users u ON u.id = c.user_id
+      ORDER BY c.timestamp DESC
+    `
+  return new Promise((resolve, reject) => {
+    db.all(query, (err, rows) => {
+      if (err) {
+        reject(new Response(`Error fetching historical check-ins`))
+      }
+      resolve(new Response(JSON.stringify(rows), { status: 200 }))
+    })
+  })
 }

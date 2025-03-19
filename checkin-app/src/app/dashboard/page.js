@@ -5,46 +5,64 @@ import { useAuth } from '@/context/authContext';
 
 
 export default function Dashboard() {
-  const [users, setUsers] = useState([]);
-  const {user} = useAuth()
+  const [liveWorkers, setLiveWorkers] = useState([]);
+  const [checkIns, setCheckIns] = useState([])
+  const { user } = useAuth()
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchLiveWorkers = async () => {
       const response = await fetch('/api/users');
       const data = await response.json();
       if (response.ok) {
-        setUsers(data);
+        setLiveWorkers(data);
       } else {
         console.error('Failed to fetch users:', data.message);
       }
     };
 
-    fetchUsers();
-  }, []);
+    const fetchCheckIns = async () => {
+      const response = await fetch("/api/checkin");
+      const data = await response.json();
+      if (response.ok) {
+        setCheckIns(data)
+      } else {
+        console.error(`Failed to fetch historical check-ins`)
+      }
+    }
+
+    fetchLiveWorkers();
+    fetchCheckIns();
+  }, [])
 
   if (user?.role !== "supervisor") {
     return (
-      <h1>Unauthorized...Supervisors only!</h1>
+      <div className="flex h-screen items-center">
+        <div className="m-auto gap-6 grid">
+          <h1 className="my-8 flex-row text-2xl font-bold">Unauthorized...Supervisors only!</h1>
+          <a href="/checkin" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center">Log in here</a>
+        </div>
+      </div>
     )
   }
 
   return (
-    <div>
-      <h1>Users List</h1>
-      <table>
+    <div className="flex flex-col max-w-4xl mx-auto p-8">
+      <h1 className="my-8 flex-row text-2xl font-bold">Live checked-in users List</h1>
+      <table className="table-auto">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Site ID</th>
+            <th>Check-in time</th>
           </tr>
         </thead>
         <tbody>
-          {users.length > 0 ? (
-            users.map((checkin) => (
-              <tr key={checkin.checkinid}>
-                <td key={`username-${checkin.username}`}>{checkin.username}</td>
-                <td key={`siteid-${checkin.side_id}`}>{checkin.site_id}</td>
+          {liveWorkers.length > 0 ? (
+            liveWorkers.map((liveWorker) => (
+              <tr key={liveWorker.checkinid}>
+                <td key={`username-${liveWorker.username}`}>{liveWorker.username}</td>
+                <td key={`siteid-${liveWorker.side_id}`}>{liveWorker.site_id}</td>
+                <td key={`checkintime-${liveWorker.timestamp}`}>{liveWorker.timestamp}</td>
               </tr>
             ))
           ) : (
