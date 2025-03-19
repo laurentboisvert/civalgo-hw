@@ -3,15 +3,14 @@ import sqlite3 from "sqlite3";
 const db = new sqlite3.Database("./checkin.db");
 
 export async function POST(req) {
-  const { username, action } = await req.json();
-  const testSiteID = 1234;
+  const { username, action, siteID } = await req.json();
 
   if (action === 'check-in') {
     // Needs to check credentials first (password)
     return new Promise((resolve, reject) => {
       db.run(
         'INSERT INTO check_ins (username, action, site_id) VALUES (?, ?, ?)',
-        [username, 'check-in', testSiteID],
+        [username, 'check-in', siteID],
         function (err) {
           if (err) {
             reject(new Response(JSON.stringify({ message: 'Error checking in' }), { status: 500 }));
@@ -39,7 +38,7 @@ export async function POST(req) {
     return new Promise((resolve, reject) => {
       db.run(
         'INSERT INTO check_ins (username, action, site_id) VALUES (?, ?, ?)',
-        [username, 'check-out', testSiteID],
+        [username, 'check-out', siteID],
         function (err) {
           if (err) {
             reject(new Response(JSON.stringify({ message: 'Error checking out' }), { status: 500 }));

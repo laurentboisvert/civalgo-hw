@@ -32,7 +32,7 @@ export default function CheckIn() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, action }),
+      body: JSON.stringify({ username, action, siteID }),
     });
 
     const data = await response.json();
@@ -54,7 +54,7 @@ export default function CheckIn() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ username, action }),
+      body: JSON.stringify({ username, action, siteID }),
     })
 
     if (response.ok) {

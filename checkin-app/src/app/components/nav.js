@@ -14,12 +14,11 @@ export const BaseFormPage = ({ children }) => {
   }
 
 export default function NavBar(props) {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
 
     const router = useRouter();
 
-    const handleCheckout = () => {
-        logout();
+    const goToCheckinPage = () => {
         router.push("/checkin")
     };
 
@@ -39,10 +38,10 @@ export default function NavBar(props) {
                             <a href="/checkin" className="hover:bg-blue-700 px-4 py-2 rounded border-2 border-white">Check-in</a>
                         ) : (
                             <button
-                                onClick={handleCheckout}
-                                className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 border-2 border-white"
+                                onClick={goToCheckinPage}
+                                className="hover:bg-blue-700 px-4 py-2 rounded border-2 border-white"
                             >
-                                Check-out
+                                Go to check-out
                             </button>
                         )}
                     </div>
