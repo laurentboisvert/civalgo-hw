@@ -20,6 +20,12 @@ export default function Dashboard() {
     };
 
     fetchLiveWorkers();
+
+    // Use 10 second interval to have a "live update" effect
+    const intervalId = setInterval(fetchLiveWorkers, 10000);
+
+    // Cleanup interval on component dismount
+    return () => clearInterval(intervalId);
   }, []);
 
   if (user?.role !== 'supervisor') {
@@ -60,7 +66,7 @@ export default function Dashboard() {
                 <td key={`username-${liveWorker.username}`}>
                   {liveWorker.username}
                 </td>
-                <td key={`siteid-${liveWorker.side_id}`}>
+                <td key={`siteid-${liveWorker.site_id}`}>
                   {liveWorker.site_id}
                 </td>
                 <td key={`checkintime-${liveWorker.timestamp}`}>
