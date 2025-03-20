@@ -9,6 +9,7 @@ import { BaseFormPage } from "../components/nav";
 export default function CheckIn() {
   const [status, setStatus] = useState(null);
   const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   const [siteID, setSiteID] = useState(1234)
 
   const { user, login, logout } = useAuth()
@@ -22,8 +23,8 @@ export default function CheckIn() {
   const handleCheckIn = async () => {
     const action = "check-in";
 
-    if (username == "" || !siteID) {
-      setStatus("Error: Please enter username and site ID")
+    if (username == "" || password == "" || !siteID) {
+      setStatus("Error: Please enter username, password and site ID")
       return
     }
 
@@ -32,7 +33,7 @@ export default function CheckIn() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, action, siteID }),
+      body: JSON.stringify({ username, password, action, siteID }),
     });
 
     const data = await response.json();
@@ -40,7 +41,6 @@ export default function CheckIn() {
       setStatus("Check-in successful!");
 
       const userData = { username, siteID, role: data.role };
-      console.log(`role is ${data.role}`)
       login(userData);
     } else {
       setStatus(`Error: ${data.message}`);
@@ -73,6 +73,9 @@ export default function CheckIn() {
         <h1 className="flex-row text-2xl font-bold">Worker Check-In</h1>
         <div>
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Username" required />
+        </div>
+        <div>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Password" required />
         </div>
         <div>
           <input type="text" value={siteID} onChange={(e) => setSiteID(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Site ID (default 1234)" required />

@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation"
 
 export const BaseFormPage = ({ children }) => {
     return (
-      <div className="flex h-screen items-center">
-        <div className="m-auto gap-6 grid">
-          {children}
+        <div className="flex h-screen items-center">
+            <div className="m-auto gap-6 grid">
+                {children}
+            </div>
         </div>
-      </div>
     )
-  }
+}
 
 export default function NavBar(props) {
     const { user } = useAuth();
@@ -27,6 +27,7 @@ export default function NavBar(props) {
             <div className="max-w-7xl mx-auto px-4 py-4">
                 <div className="flex justify-between items-center">
                     <div className="space-x-4 ml-auto">
+                        <a href="/" className="hover:bg-blue-700 px-4 py-2 rounded">Home</a>
                         {/* Supervisor Links */}
                         {user?.role === "supervisor" && (
                             <>
