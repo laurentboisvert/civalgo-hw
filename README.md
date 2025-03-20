@@ -15,6 +15,14 @@
     npm run setup-db
     ```
 
+1. You are going to need `sqlite3` on your system:
+
+    Ubuntu-based systems:
+
+    ```bash
+    sudo apt-get install sqlite3
+    ```
+
 ## Usage
 
 ```bash
