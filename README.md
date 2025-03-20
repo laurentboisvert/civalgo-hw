@@ -21,3 +21,17 @@
 cd checkin-app
 npm run dev
 ```
+
+## Credentials
+
+Use these to see the role-specific UI.
+
+### Supervisor role
+
+Username: `supervisor1`
+Password: `password123`
+
+### Worker role
+
+Username: `worker1`
+Password: `password123`
