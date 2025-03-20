@@ -28,7 +28,7 @@ export default function CheckIn() {
       return
     }
 
-    const response = await fetch("/api/checkin", {
+    const response = await fetch("/api/checkins", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export default function CheckIn() {
   const handleCheckout = async () => {
 
     const action = "check-out"
-    const response = await fetch("/api/checkin", {
+    const response = await fetch("/api/checkins", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

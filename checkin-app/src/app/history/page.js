@@ -15,7 +15,7 @@ export default function History() {
 
   useEffect(() => {
     const fetchCheckIns = async () => {
-      const response = await fetch("/api/checkin");
+      const response = await fetch("/api/checkins/history");
       const data = await response.json();
       if (response.ok) {
         setCheckIns(data);

@@ -6,12 +6,11 @@ import { useAuth } from '@/context/authContext';
 
 export default function Dashboard() {
   const [liveWorkers, setLiveWorkers] = useState([]);
-  const [checkIns, setCheckIns] = useState([])
   const { user } = useAuth()
 
   useEffect(() => {
     const fetchLiveWorkers = async () => {
-      const response = await fetch('/api/users');
+      const response = await fetch('/api/checkins/live');
       const data = await response.json();
       if (response.ok) {
         setLiveWorkers(data);
@@ -20,18 +19,7 @@ export default function Dashboard() {
       }
     };
 
-    const fetchCheckIns = async () => {
-      const response = await fetch("/api/checkin");
-      const data = await response.json();
-      if (response.ok) {
-        setCheckIns(data)
-      } else {
-        console.error(`Failed to fetch historical check-ins`)
-      }
-    }
-
     fetchLiveWorkers();
-    fetchCheckIns();
   }, [])
 
   if (user?.role !== "supervisor") {
