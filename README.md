@@ -43,3 +43,7 @@ Password: `password123`
 
 Username: `worker1`
 Password: `password123`
+
+## Demo
+
+A short video demo of the app is available [here](https://drive.google.com/file/d/1QVXCmfYHCICa-wqAgeg7hJhay7On2_oa/view?usp=sharing).
