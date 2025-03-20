@@ -48,14 +48,14 @@ export default function CheckIn() {
   };
 
   const handleCheckout = async () => {
-
     const action = "check-out"
+    
     const response = await fetch("/api/checkins", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ username, action, siteID: user.siteID }),
+      body: JSON.stringify({ username: user.username, action, siteID: user.siteID }),
     })
 
     if (response.ok) {
