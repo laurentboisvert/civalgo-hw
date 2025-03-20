@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./checkin.db');
 
 db.serialize(() => {
-  console.log("Creating DB...")
+  console.log('Creating DB...');
   db.run(`
     CREATE TABLE users (
       username TEXT PRIMARY KEY,  -- Changed from id INTEGER PRIMARY KEY AUTOINCREMENT
@@ -28,7 +28,7 @@ db.serialize(() => {
     ('supervisor1', 'password123', 'supervisor');
   `);
 
-  console.log("DB setup complete!");
+  console.log('DB setup complete!');
 });
 
 db.close();

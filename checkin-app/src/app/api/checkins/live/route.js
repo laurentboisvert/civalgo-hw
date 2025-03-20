@@ -29,7 +29,11 @@ export async function GET() {
 
     db.all(query, (err, rows) => {
       if (err) {
-        reject(new Response(JSON.stringify({ message: 'Error fetching users' }), { status: 500 }));
+        reject(
+          new Response(JSON.stringify({ message: 'Error fetching users' }), {
+            status: 500,
+          }),
+        );
       } else {
         resolve(new Response(JSON.stringify(rows), { status: 200 }));
       }

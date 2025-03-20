@@ -1,7 +1,10 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/authContext';
+import Link from 'next/link';
+
+import { InputField } from '../components/forms';
 
 export default function History() {
   const [checkIns, setCheckIns] = useState([]);
@@ -15,11 +18,11 @@ export default function History() {
 
   useEffect(() => {
     const fetchCheckIns = async () => {
-      const response = await fetch("/api/checkins/history");
+      const response = await fetch('/api/checkins/history');
       const data = await response.json();
       if (response.ok) {
         setCheckIns(data);
-        setFilteredCheckIns(data); // Initialize filtered data
+        setFilteredCheckIns(data);
       } else {
         console.error('Failed to fetch historical check-ins');
       }
@@ -32,20 +35,35 @@ export default function History() {
     // Apply filters on the check-ins data
     const filtered = checkIns.filter((checkin) => {
       return (
-        (usernameFilter ? checkin.username.toLowerCase().includes(usernameFilter.toLowerCase()) : true) &&
-        (timestampFilter ? checkin.timestamp.includes(timestampFilter) : true) &&
-        (siteIdFilter ? checkin.site_id.toString().includes(siteIdFilter) : true)
+        (usernameFilter
+          ? checkin.username
+              .toLowerCase()
+              .includes(usernameFilter.toLowerCase())
+          : true) &&
+        (timestampFilter
+          ? checkin.timestamp.includes(timestampFilter)
+          : true) &&
+        (siteIdFilter
+          ? checkin.site_id.toString().includes(siteIdFilter)
+          : true)
       );
     });
     setFilteredCheckIns(filtered);
   }, [usernameFilter, timestampFilter, siteIdFilter, checkIns]);
 
-  if (user?.role !== "supervisor") {
+  if (user?.role !== 'supervisor') {
     return (
       <div className="flex h-screen items-center">
         <div className="m-auto gap-6 grid">
-          <h1 className="my-8 flex-row text-2xl font-bold">Unauthorized...Supervisors only!</h1>
-          <a href="/checkin" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center">Log in here</a>
+          <h1 className="my-8 flex-row text-2xl font-bold">
+            Unauthorized...Supervisors only!
+          </h1>
+          <Link
+            href="/checkin"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
+          >
+            Log in here
+          </Link>
         </div>
       </div>
     );
@@ -54,24 +72,24 @@ export default function History() {
   return (
     <div className="flex flex-col max-w-4xl mx-auto p-8">
       <h1 className="my-8 flex-row text-2xl font-bold">Historical data</h1>
-      
+
       {/* Filters */}
       <div className="flex gap-4 mb-6">
-        <input
+        <InputField
           type="text"
           placeholder="Filter by Username"
           value={usernameFilter}
           onChange={(e) => setUsernameFilter(e.target.value)}
           className="border p-2 rounded"
         />
-        <input
+        <InputField
           type="text"
           placeholder="Filter by Site ID"
           value={siteIdFilter}
           onChange={(e) => setSiteIdFilter(e.target.value)}
           className="border p-2 rounded"
         />
-        <input
+        <InputField
           type="text"
           placeholder="Filter by Timestamp"
           value={timestampFilter}
