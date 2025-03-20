@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build-db": "node setup-db.js",
+    "setup-db": "node setup-db.js",
     "format": "prettier --write ."
   },
   "dependencies": {
